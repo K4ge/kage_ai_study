@@ -1,9 +1,12 @@
 import numpy as np
-N=5
-x = np.array([[1.0, 2.0],
- [3.0, 4.0],
- [5.0, 6.0]])
+def relu(z):
+    return np.maximum(0, z)
 
-print(x[0:2])
-print(x[:,0])
+def relu_grad(z):
+    return (z > 0).astype(float)
 
+
+
+X= np.array([[1,-2,3],[-1,-2,-3]])
+
+print(relu_grad(X))

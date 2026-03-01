@@ -1,12 +1,5 @@
-import numpy as np
-def relu(z):
-    return np.maximum(0, z)
+import torch
 
-def relu_grad(z):
-    return (z > 0).astype(float)
-
-
-
-X= np.array([[1,-2,3],[-1,-2,-3]])
-
-print(relu_grad(X))
+print(torch.__version__)
+x = torch.tensor([1.0, 2.0, 3.0])
+print(x)

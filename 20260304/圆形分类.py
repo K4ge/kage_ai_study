@@ -9,17 +9,20 @@ import numpy as np
 
 
 # 输入数据
-X = torch.tensor([
-    [1.0,1.0],
-    [1.0,2.0],
-    [2.0,1.0],
-    [4.0,4.0],
-    [5.0,4.0],
-    [4.0,5.0]
-])
+# 生成随机点
+N = 200
 
-# 标签
-y = torch.tensor([0,0,0,1,1,1])
+x = np.random.uniform(-1,1,(N,2))
+
+# 计算半径
+r = np.sqrt(x[:,0]**2 + x[:,1]**2)
+
+# 圆内为0 圆外为1
+y = (r > 0.5).astype(int)
+
+X = torch.tensor(x,dtype=torch.float32)
+y = torch.tensor(y,dtype=torch.long)
+
 dataset = TensorDataset(X, y)
 loader = DataLoader(dataset, batch_size=2, shuffle=True)
 
@@ -50,9 +53,9 @@ print("outputs shape:",outputs.shape)
 print(outputs)
 
 criterion = nn.CrossEntropyLoss()
-optimizer = optim.SGD(model.parameters(), lr=0.1)
+optimizer = optim.SGD(model.parameters(), lr=0.05)
 
-for epoch in range(200):
+for epoch in range(500):
     # 1) 前向：得到 logits
     for batch_X, batch_y in loader:
         logits = model(batch_X)
@@ -82,8 +85,8 @@ for i in range(len(X_np)):
 
 
 # 画 decision boundary
-x1 = np.linspace(0,6,400)
-x2 = np.linspace(0,6,400)
+x1 = np.linspace(-1.2, 1.2, 400)
+x2 = np.linspace(-1.2, 1.2, 400)
 
 xx1, xx2 = np.meshgrid(x1, x2)
 
@@ -99,4 +102,7 @@ pred = pred.numpy().reshape(xx1.shape)
 plt.contourf(xx1, xx2, pred, alpha=0.3)
 
 plt.title("Decision Boundary")
+plt.xlim(-1.2, 1.2)
+plt.ylim(-1.2, 1.2)
+plt.gca().set_aspect('equal', adjustable='box')
 plt.show()

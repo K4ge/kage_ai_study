@@ -2,6 +2,11 @@ import torch.nn as nn
 import torch
 import torch.optim as optim
 from torch.utils.data import TensorDataset, DataLoader
+import matplotlib
+matplotlib.use("TkAgg")
+import matplotlib.pyplot as plt
+import numpy as np
+
 
 # 输入数据
 X = torch.tensor([
@@ -64,3 +69,34 @@ pred = torch.argmax(logits, dim=1)
 print("Final pred:", pred)
 print("True y   :", y)
 
+# 转成 numpy 方便画图
+X_np = X.numpy()
+y_np = y.numpy()
+
+# 画原始数据点
+for i in range(len(X_np)):
+    if y_np[i] == 0:
+        plt.scatter(X_np[i,0], X_np[i,1], color="red")
+    else:
+        plt.scatter(X_np[i,0], X_np[i,1], color="blue")
+
+
+# 画 decision boundary
+x1 = np.linspace(0,6,100)
+x2 = np.linspace(0,6,100)
+
+xx1, xx2 = np.meshgrid(x1, x2)
+
+grid = np.c_[xx1.ravel(), xx2.ravel()]
+grid_tensor = torch.tensor(grid, dtype=torch.float32)
+
+with torch.no_grad():
+    logits = model(grid_tensor)
+    pred = torch.argmax(logits, dim=1)
+
+pred = pred.numpy().reshape(xx1.shape)
+
+plt.contourf(xx1, xx2, pred, alpha=0.3)
+
+plt.title("Decision Boundary")
+plt.show()

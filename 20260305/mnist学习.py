@@ -1,6 +1,9 @@
 import torch
 from torch.utils.data import DataLoader
 from torchvision import datasets, transforms
+import matplotlib
+matplotlib.use("TkAgg")
+import matplotlib.pyplot as plt
 
 print("torch:", torch.__version__)
 
@@ -25,3 +28,10 @@ print("images shape:", images.shape)   # 期望: (64, 1, 28, 28)
 print("labels shape:", labels.shape)   # 期望: (64,)
 print("labels sample:", labels[:10])
 print("images min/max:", images.min().item(), images.max().item())
+
+img = images[0]
+label = labels[0]
+
+plt.imshow(img.squeeze(), cmap="gray")
+plt.title(f"label = {label.item()}")
+plt.show()

@@ -33,8 +33,8 @@ class Net(nn.Module):
     def __init__(self):
         super().__init__()
 
-        self.fc1 = nn.Linear(2,8)
-        self.fc2 = nn.Linear(8,2)
+        self.fc1 = nn.Linear(2,32)
+        self.fc2 = nn.Linear(32,2)
 
     def forward(self,x):
 
@@ -53,7 +53,7 @@ print("outputs shape:",outputs.shape)
 print(outputs)
 
 criterion = nn.CrossEntropyLoss()
-optimizer = optim.SGD(model.parameters(), lr=0.05)
+optimizer = optim.Adam(model.parameters(), lr=0.05)
 
 for epoch in range(500):
     # 1) 前向：得到 logits

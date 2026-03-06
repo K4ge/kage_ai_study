@@ -103,17 +103,28 @@ import matplotlib
 matplotlib.use("TkAgg")
 import matplotlib.pyplot as plt
 
-# 取出第一层卷积核，先搬到 cpu，再断开梯度
-weights = model.conv1.weight.detach().cpu()
+# 取一张测试图片
+images, labels = next(iter(test_loader))
+image = images[0:1]  # 只取一张
 
-print("conv1 weight shape:", weights.shape)  # [16, 1, 3, 3]
+# 放到device
+image = image.to(device)
+
+# 只通过第一层卷积
+with torch.no_grad():
+    feature_maps = model.conv2(model.pool1(model.relu1(model.conv1(image))))
+
+# 搬回CPU方便画图
+feature_maps = feature_maps.cpu()
+
+print("feature map shape:", feature_maps.shape)
 
 fig, axes = plt.subplots(4, 4, figsize=(8, 8))
 
 for i, ax in enumerate(axes.flat):
-    kernel = weights[i, 0]   # 第 i 个卷积核，第 0 个通道
-    ax.imshow(kernel, cmap="gray")
-    ax.set_title(f"k{i}")
+    fmap = feature_maps[0, i]
+    ax.imshow(fmap, cmap="gray")
+    ax.set_title(f"map {i}")
     ax.axis("off")
 
 plt.tight_layout()

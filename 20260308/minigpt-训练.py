@@ -6,7 +6,7 @@ device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 print("device:", device)
 
 # 定义文本
-text = "hello world"
+text = "一直以来对AI就挺感兴趣，但由于工作忙一直没有下定决心好好学习AI。同时目前工作对AI的融合要求也越来越高，能够掌握AI方面的底层知识对于自己工作及个人竞争力的提升有很大帮助。恰逢马年回去相亲认识一亲戚朋友，南大硕士研究AI智能驾驶相关知识，对人工智能机计算机底层芯片相关知识特别专业，个人对该方向也很感兴趣，恰逢此契机点燃了我内心的火炬，也跟随该项目记录自己的AI成长计划。"
 
 # 去重
 chars = sorted(list(set(text)))
@@ -187,5 +187,5 @@ for step in range(1000):
 
 # 生成
 start = torch.zeros((1, 1), dtype=torch.long, device=device)
-generated = model.generate(start, 100)[0].cpu().tolist()
+generated = model.generate(start, 1000)[0].cpu().tolist()
 print(decode(generated))
